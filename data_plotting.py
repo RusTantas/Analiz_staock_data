@@ -16,3 +16,4 @@ def create_and_save_plot(data, ticker, period, filename=None):
         plt.savefig(f'{ticker}_{period}.png')
 
     plt.show()
+
