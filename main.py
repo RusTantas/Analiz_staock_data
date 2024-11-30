@@ -1,16 +1,18 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from data_download import fetch_stock_data, add_moving_average
+from data_plotting import create_and_save_plot
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def main():
+    ticker = input("Введите тикер акции (например, AAPL): ")
+    period = input("Введите период (например, 1mo, 1y, max): ")
+
+    try:
+        data = fetch_stock_data(ticker, period)
+        data = add_moving_average(data)
+        create_and_save_plot(data, ticker, period)
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    main()
