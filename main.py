@@ -1,4 +1,4 @@
-from data_download import fetch_stock_data, add_moving_average, calculate_and_display_average_price, notify_if_strong_fluctuations
+from data_download import fetch_stock_data, add_moving_average, calculate_and_display_average_price, notify_if_strong_fluctuations, export_data_to_csv
 from data_plotting import create_and_save_plot
 
 
@@ -14,6 +14,7 @@ def main():
         calculate_and_display_average_price(data)
         data = fetch_stock_data(ticker, period)
         notify_if_strong_fluctuations(data, 5)  # 5% - пример порогового значения задаеться пользователем
+        export_data_to_csv(data, 'Выгрузка')
     except Exception as e:
         print(f"Произошла ошибка: {e}")
 

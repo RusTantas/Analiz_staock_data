@@ -49,3 +49,14 @@ def notify_if_strong_fluctuations(data, threshold):
         print(f"Колебание: {fluctuation:.2f}%")
     else:
         print(f"Сильных колебаний цены не обнаружено. Максимальное колебание: {fluctuation:.2f}%")
+
+
+'''
+Добавить функцию export_data_to_csv(data, filename), которая позволяет сохранять загруженные данные об акциях в CSV файл.
+'''
+def export_data_to_csv(data, filename):
+    try:
+        data.to_csv(filename, index=True)
+        print(f"Данные успешно экспортированы в {filename}")
+    except Exception as e:
+        print(f"Произошла ошибка при экспорте данных: {e}")
