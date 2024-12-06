@@ -60,3 +60,20 @@ def export_data_to_csv(data, filename):
         print(f"Данные успешно экспортированы в {filename}")
     except Exception as e:
         print(f"Произошла ошибка при экспорте данных: {e}")
+
+""" Реализация функции RSI(индекс относительной силы)"""
+def add_rsi(data, window=14):
+    delta = data['Close'].diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
+    rs = gain / loss
+    data['RSI'] = 100 - (100 / (1 + rs))
+    return data
+""" Реализация функции MACD (схождение-расхождение скользящих средних)"""
+def add_macd(data, short_window=12, long_window=26, signal_window=9):
+    short_ema = data['Close'].ewm(span=short_window, adjust=False).mean()
+    long_ema = data['Close'].ewm(span=long_window, adjust=False).mean()
+    data['MACD'] = short_ema - long_ema
+    data['Signal_Line'] = data['MACD'].ewm(span=signal_window, adjust=False).mean()
+    data['MACD_Histogram'] = data['MACD'] - data['Signal_Line']
+    return data

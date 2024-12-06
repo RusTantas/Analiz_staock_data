@@ -1,4 +1,4 @@
-from data_download import fetch_stock_data, add_moving_average, calculate_and_display_average_price, notify_if_strong_fluctuations, export_data_to_csv
+from data_download import *
 from data_plotting import create_and_save_plot
 
 
@@ -9,6 +9,8 @@ def main():
     try:
         data = fetch_stock_data(ticker, period)
         data = add_moving_average(data)
+        data = add_rsi(data)
+        data = add_macd(data)
         create_and_save_plot(data, ticker, period)
         data = fetch_stock_data(ticker, period)
         calculate_and_display_average_price(data)
