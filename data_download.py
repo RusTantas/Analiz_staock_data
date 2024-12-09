@@ -1,12 +1,25 @@
 import yfinance as yf
 import pandas as pd
+from datetime import datetime
 
 '''
 Загрузка ДФ
 '''
-def fetch_stock_data(ticker, period):
+
+""" Изменяем интерфейс пользования датой"""
+def fetch_stock_data(ticker, start_date=None, end_date=None, period=None):
     stock = yf.Ticker(ticker)
-    data = stock.history(period=period)
+
+    if start_date and end_date:
+        # Преобразуем строки дат в объекты datetime
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d")
+        data = stock.history(start=start, end=end)
+    elif period:
+        data = stock.history(period=period)
+    else:
+        raise ValueError("Необходимо указать либо период, либо даты начала и окончания")
+
     return data
 
 '''
