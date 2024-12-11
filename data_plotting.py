@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 
-def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
+def create_and_save_plot(data, ticker, start_date, end_date, style='default', filename=None):
+    plt.style.use(style)
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(12, 20), sharex=True)
 
     # График цены закрытия и скользящего среднего
