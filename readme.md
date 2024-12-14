@@ -69,15 +69,6 @@
 
 
 Примеры работы приложения 
-![NVDA_max.png](NVDA_max.png)
-
-
-
-
-![TSLA_1y.png](TSLA_1y.png)
-
-[NVDA_20241209_191426.csv](NVDA_20241209_191426.csv)
-![NVDA_2023-3-3_2024-3-3.png](NVDA_2023-3-3_2024-3-3.png)
-
-![AAPL_1y_1y.png](AAPL_1y_1y.png)
+!![DIS_1y_1y.png](DIS_1y_1y.png)
+[DIS_20241214_122323.csv](DIS_20241214_122323.csv)
 
