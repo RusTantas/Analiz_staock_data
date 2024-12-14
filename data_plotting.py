@@ -1,10 +1,15 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import seaborn as sns
 
 
 def create_and_save_plot(data, ticker, start_date, end_date, style='default', filename=None):
+    if style == 'seaborn':
+        sns.set_style("darkgrid")
+    else:
+        plt.style.use(style)
     plt.style.use(style)
-    fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(12, 20), sharex=True)
+    fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, figsize=(12, 25), sharex=True)
 
     # График цены закрытия и скользящего среднего
     ax1.plot(data.index, data['Close'], label='Цена закрытия')
@@ -28,15 +33,20 @@ def create_and_save_plot(data, ticker, start_date, end_date, style='default', fi
     ax3.set_ylabel('MACD')
     ax3.legend()
 
-    # График объема торгов
-    ax4.bar(data.index, data['Volume'], label='Объем', color='lightblue')
-    ax4.set_ylabel('Объем')
-    ax4.set_xlabel('Дата')
+    # График стандартного отклонения
+    ax4.plot(data.index, data['StdDev'], label='Стандартное отклонение', color='red')
+    ax4.set_ylabel('Стандартное отклонение')
     ax4.legend()
 
+    # График объема торгов
+    ax5.bar(data.index, data['Volume'], label='Объем', color='lightblue')
+    ax5.set_ylabel('Объем')
+    ax5.set_xlabel('Дата')
+    ax5.legend()
+
     # Настройка формата даты на оси X
-    ax4.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-    ax4.xaxis.set_major_locator(mdates.AutoDateLocator())
+    ax5.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    ax5.xaxis.set_major_locator(mdates.AutoDateLocator())
 
     plt.tight_layout()
 

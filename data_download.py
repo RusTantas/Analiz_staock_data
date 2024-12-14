@@ -90,3 +90,7 @@ def add_macd(data, short_window=12, long_window=26, signal_window=9):
     data['Signal_Line'] = data['MACD'].ewm(span=signal_window, adjust=False).mean()
     data['MACD_Histogram'] = data['MACD'] - data['Signal_Line']
     return data
+'''  Реализация функции для расчета стандартного отклонения '''
+def add_standard_deviation(data, window=20):
+    data['StdDev'] = data['Close'].rolling(window=window).std()
+    return data
