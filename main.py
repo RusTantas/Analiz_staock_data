@@ -1,6 +1,7 @@
 from data_download import *
-from data_plotting import create_and_save_plot
+from data_plotting import create_interactive_plot, calculate_and_display_average_price
 from datetime import datetime
+from stock_prediction import run_prediction
 
 
 def process_data(data, ticker, start_date, end_date, style):
@@ -16,7 +17,8 @@ def process_data(data, ticker, start_date, end_date, style):
 
     filename = f"{ticker}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
     export_data_to_csv(data, filename)
-    create_and_save_plot(data, ticker, start_date, end_date, style=style)
+    create_interactive_plot(data, ticker, start_date, end_date)
+    avg_price = calculate_and_display_average_price(data)
 
 
 def main():
@@ -38,15 +40,21 @@ def main():
     try:
         if date_choice == "1":
             period = input("Введите период (например, 1mo, 1y, max): ")
+            predict_choice = input("Хотите выполнить прогноз? (y/n): ")
             data = fetch_stock_data(ticker, period=period)
             process_data(data, ticker, period, period, style)
+            if predict_choice.lower() == 'y':
+                run_prediction(data, ticker)
+
         elif date_choice == "2":
             start_date = input("Введите дату начала в формате YYYY-MM-DD: ")
             end_date = input("Введите дату окончания в формате YYYY-MM-DD: ")
             data = fetch_stock_data(ticker, start_date=start_date, end_date=end_date)
             process_data(data, ticker, start_date, end_date, style)
-        else:
-            print("Некорректный выбор. Пожалуйста, выберите 1 или 2.")
+            predict_choice = input("Хотите выполнить прогноз? (y/n): ")
+            if predict_choice.lower() == 'y':
+                run_prediction(data, ticker)
+
     except ValueError as e:
         print(f"Ошибка ввода данных: {e}")
     except Exception as e:

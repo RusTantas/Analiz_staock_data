@@ -1,58 +1,33 @@
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import seaborn as sns
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
-
-def create_and_save_plot(data, ticker, start_date, end_date, style='default', filename=None):
-    if style == 'seaborn':
-        sns.set_style("darkgrid")
-    else:
-        plt.style.use(style)
-    plt.style.use(style)
-    fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, figsize=(12, 25), sharex=True)
+def create_interactive_plot(data, ticker, start_date, end_date):
+    fig = make_subplots(rows=4, cols=1, shared_xaxes=True, vertical_spacing=0.05,
+                        subplot_titles=('Цена акции', 'RSI', 'MACD', 'Объем торгов'))
 
     # График цены закрытия и скользящего среднего
-    ax1.plot(data.index, data['Close'], label='Цена закрытия')
-    ax1.plot(data.index, data['MA'], label='Скользящее среднее')
-    ax1.set_title(f'Анализ акции {ticker} с {start_date} по {end_date}')
-    ax1.set_ylabel('Цена')
-    ax1.legend()
+    fig.add_trace(go.Scatter(x=data.index, y=data['Close'], name='Цена закрытия'), row=1, col=1)
+    fig.add_trace(go.Scatter(x=data.index, y=data['MA'], name='Скользящее среднее'), row=1, col=1)
 
     # График RSI
-    ax2.plot(data.index, data['RSI'], label='RSI', color='purple')
-    ax2.axhline(y=70, color='red', linestyle='--')
-    ax2.axhline(y=30, color='green', linestyle='--')
-    ax2.set_ylabel('RSI')
-    ax2.set_ylim(0, 100)
-    ax2.legend()
+    fig.add_trace(go.Scatter(x=data.index, y=data['RSI'], name='RSI'), row=2, col=1)
+    fig.add_hline(y=70, line_dash="dash", line_color="red", row=2, col=1)
+    fig.add_hline(y=30, line_dash="dash", line_color="green", row=2, col=1)
 
     # График MACD
-    ax3.plot(data.index, data['MACD'], label='MACD', color='blue')
-    ax3.plot(data.index, data['Signal_Line'], label='Сигнальная линия', color='orange')
-    ax3.bar(data.index, data['MACD_Histogram'], label='Гистограмма MACD', color='gray', alpha=0.3)
-    ax3.set_ylabel('MACD')
-    ax3.legend()
-
-    # График стандартного отклонения
-    ax4.plot(data.index, data['StdDev'], label='Стандартное отклонение', color='red')
-    ax4.set_ylabel('Стандартное отклонение')
-    ax4.legend()
+    fig.add_trace(go.Scatter(x=data.index, y=data['MACD'], name='MACD'), row=3, col=1)
+    fig.add_trace(go.Scatter(x=data.index, y=data['Signal_Line'], name='Сигнальная линия'), row=3, col=1)
+    fig.add_trace(go.Bar(x=data.index, y=data['MACD_Histogram'], name='Гистограмма MACD'), row=3, col=1)
 
     # График объема торгов
-    ax5.bar(data.index, data['Volume'], label='Объем', color='lightblue')
-    ax5.set_ylabel('Объем')
-    ax5.set_xlabel('Дата')
-    ax5.legend()
+    fig.add_trace(go.Bar(x=data.index, y=data['Volume'], name='Объем'), row=4, col=1)
 
-    # Настройка формата даты на оси X
-    ax5.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-    ax5.xaxis.set_major_locator(mdates.AutoDateLocator())
+    fig.update_layout(title_text=f'Анализ акции {ticker} с {start_date} по {end_date}',
+                      height=1200, width=1200)
 
-    plt.tight_layout()
+    fig.show()
 
-    if filename:
-        plt.savefig(filename)
-    else:
-        plt.savefig(f'{ticker}_{start_date}_{end_date}.png')
-
-    plt.show()
+def calculate_and_display_average_price(data):
+    average_price = data['Close'].mean()
+    print(f"Средняя цена закрытия акций: {average_price:.2f}")
+    return average_price
