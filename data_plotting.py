@@ -1,6 +1,7 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+
 def create_interactive_plot(data, ticker, start_date, end_date):
     fig = make_subplots(rows=4, cols=1, shared_xaxes=True, vertical_spacing=0.05,
                         subplot_titles=('Цена акции', 'RSI', 'MACD', 'Объем торгов'))
@@ -26,6 +27,7 @@ def create_interactive_plot(data, ticker, start_date, end_date):
                       height=1200, width=1200)
 
     fig.show()
+
 
 def calculate_and_display_average_price(data):
     average_price = data['Close'].mean()

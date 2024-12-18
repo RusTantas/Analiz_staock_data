@@ -6,7 +6,11 @@ from datetime import datetime
 Загрузка ДФ
 '''
 
-""" Изменяем интерфейс пользования датой"""
+""" 
+Изменяем интерфейс пользования датой
+"""
+
+
 def fetch_stock_data(ticker, start_date=None, end_date=None, period=None):
     stock = yf.Ticker(ticker)
 
@@ -22,21 +26,26 @@ def fetch_stock_data(ticker, start_date=None, end_date=None, period=None):
 
     return data
 
+
 '''
 Формирование столбика МА цена на закрытии
 '''
+
+
 def add_moving_average(data, window_size=20):
     data['MA'] = data['Close'].rolling(window=window_size).mean()
     return data
 
-'''
 
+'''
 calculate_and_display_average_price
 Цель:
 Вычисляет и выводит среднюю цену закрытия акций за заданный период.
 Реализация:
 Функция будет принимать DataFrame и вычислять среднее значение колонки 'Close'. Результат будет выводиться в консоль.
 '''
+
+
 def calculate_and_display_average_price(data):
     average_price = data['Close'].mean()
     print(f"Средняя цена закрытия акций: {average_price:.2f}")
@@ -50,6 +59,8 @@ notify_if_strong_fluctuations
 Функция будет вычислять максимальное и минимальное значения цены закрытия и сравнивать разницу 
 с заданным порогом. Если разница превышает порог, пользователь получает уведомление.
 '''
+
+
 def notify_if_strong_fluctuations(data, threshold):
     max_price = data['Close'].max()
     min_price = data['Close'].min()
@@ -65,8 +76,10 @@ def notify_if_strong_fluctuations(data, threshold):
 
 
 '''
-Добавить функцию export_data_to_csv(data, filename), которая позволяет сохранять загруженные данные об акциях в CSV файл.
+Добавить функцию export_data_to_csv(data, filename), которая позволяет сохранять загруженные данные об акциях в CSV файл
 '''
+
+
 def export_data_to_csv(data, filename):
     try:
         data.to_csv(filename, index=True)
@@ -74,7 +87,12 @@ def export_data_to_csv(data, filename):
     except Exception as e:
         print(f"Произошла ошибка при экспорте данных: {e}")
 
-""" Реализация функции RSI(индекс относительной силы)"""
+
+""" 
+Реализация функции RSI(индекс относительной силы)
+"""
+
+
 def add_rsi(data, window=14):
     delta = data['Close'].diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
@@ -82,7 +100,13 @@ def add_rsi(data, window=14):
     rs = gain / loss
     data['RSI'] = 100 - (100 / (1 + rs))
     return data
-""" Реализация функции MACD (схождение-расхождение скользящих средних)"""
+
+
+""" 
+Реализация функции MACD (схождение-расхождение скользящих средних)
+"""
+
+
 def add_macd(data, short_window=12, long_window=26, signal_window=9):
     short_ema = data['Close'].ewm(span=short_window, adjust=False).mean()
     long_ema = data['Close'].ewm(span=long_window, adjust=False).mean()
@@ -90,7 +114,13 @@ def add_macd(data, short_window=12, long_window=26, signal_window=9):
     data['Signal_Line'] = data['MACD'].ewm(span=signal_window, adjust=False).mean()
     data['MACD_Histogram'] = data['MACD'] - data['Signal_Line']
     return data
-'''  Реализация функции для расчета стандартного отклонения '''
+
+
+'''  
+Реализация функции для расчета стандартного отклонения 
+'''
+
+
 def add_standard_deviation(data, window=20):
     data['StdDev'] = data['Close'].rolling(window=window).std()
     return data
