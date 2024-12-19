@@ -3,12 +3,27 @@ from data_plotting import create_interactive_plot, calculate_and_display_average
 from datetime import datetime
 from stock_prediction import run_prediction
 
-
 def process_data(data, ticker, start_date, end_date, style):
+    """
+    Обрабатывает данные акций, добавляет технические индикаторы и отображает результаты.
+
+    Args:
+        data (pandas.DataFrame): DataFrame с данными акций.
+        ticker (str): Тикер акции.
+        start_date (str): Дата начала периода анализа.
+        end_date (str): Дата окончания периода анализа.
+        style (str): Стиль графика для отображения.
+
+    Returns:
+        None
+
+    This function adds technical indicators to the stock data, calculates average price,
+    checks for strong fluctuations, exports data to CSV, and creates an interactive plot.
+    """
     data = add_moving_average(data)
     data = add_rsi(data)
     data = add_macd(data)
-    data = add_standard_deviation(data)  # Добавляем новую функцию
+    data = add_standard_deviation(data)
 
     calculate_and_display_average_price(data)
 
@@ -20,8 +35,18 @@ def process_data(data, ticker, start_date, end_date, style):
     create_interactive_plot(data, ticker, start_date, end_date)
     avg_price = calculate_and_display_average_price(data)
 
-
 def main():
+    """
+    Основная функция программы для анализа акций.
+
+    Эта функция запрашивает у пользователя ввод тикера акции, периода анализа,
+    стиля графика и выбор прогнозирования. Затем она загружает данные,
+    обрабатывает их и отображает результаты.
+
+    Raises:
+        ValueError: Если введены некорректные данные.
+        Exception: При возникновении непредвиденных ошибок.
+    """
     ticker = input("Введите тикер акции (например, AAPL): ")
     date_choice = input("Выберите способ указания периода (1 - предустановленный период, 2 - конкретные даты): ")
 
@@ -59,7 +84,6 @@ def main():
         print(f"Ошибка ввода данных: {e}")
     except Exception as e:
         print(f"Произошла непредвиденная ошибка: {e}")
-
 
 if __name__ == "__main__":
     main()
